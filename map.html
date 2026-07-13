@@ -1,0 +1,260 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Una mappa interattiva dei paesi visitati, arricchita con bandiere e statistiche di viaggio."
+    />
+    <meta name="theme-color" content="#f4f1e9" />
+    <title>Conquer the World — Il mio atlante di viaggio</title>
+
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
+    <link rel="stylesheet" href="./map-styles.css" />
+  </head>
+
+  <body>
+    <div class="page-glow page-glow--one" aria-hidden="true"></div>
+
+    <header class="hero">
+      <nav class="nav shell" aria-label="Navigazione principale">
+        <a
+          class="brand"
+          href="./index.html"
+          aria-label="Pietro Fecchio, torna al portfolio"
+        >
+          <span class="brand__mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" role="img">
+              <path
+                d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0c2.2-2.4 3.3-5.4 3.3-9S14.2 5.4 12 3m0 18c-2.2-2.4-3.3-5.4-3.3-9S9.8 5.4 12 3M3.5 9h17m-17 6h17"
+              />
+            </svg>
+          </span>
+          <span>Conquer the World</span>
+        </a>
+
+        <a class="nav__link" href="./index.html">
+          Torna al portfolio
+          <span aria-hidden="true">↖</span>
+        </a>
+      </nav>
+
+      <div class="hero__content shell">
+        <div class="hero__copy">
+          <p class="eyebrow">
+            <span></span>
+            Il mio atlante personale
+          </p>
+          <h1>
+            Ogni viaggio lascia
+            <em>un colore sulla mappa.</em>
+          </h1>
+          <p class="hero__intro">
+            Paesi, partenze e ricordi raccolti in un'unica vista. Un atlante
+            personale che si colora a ogni nuovo viaggio.
+          </p>
+
+          <div class="hero__actions">
+            <a class="button button--primary" href="#mappa">
+              Esplora la mappa
+              <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero__art" aria-hidden="true">
+          <div class="globe">
+            <div class="globe__grid globe__grid--vertical"></div>
+            <div class="globe__grid globe__grid--horizontal"></div>
+            <div class="globe__land globe__land--one"></div>
+            <div class="globe__land globe__land--two"></div>
+            <div class="globe__land globe__land--three"></div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="stats-strip shell" id="statistiche" aria-label="Statistiche principali">
+        <article class="stat-card">
+          <span class="stat-card__label">Paesi</span>
+          <strong data-stat="countries">—</strong>
+          <small>su 195 nel mondo</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Visite</span>
+          <strong data-stat="visits">—</strong>
+          <small>viaggi registrati</small>
+        </article>
+        <article class="stat-card">
+          <span class="stat-card__label">Continenti</span>
+          <strong data-stat="continents">—</strong>
+          <small>ancora tanto da vedere</small>
+        </article>
+      </section>
+
+      <section class="map-section shell" id="mappa">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">La mappa dei paesi</p>
+            <h2>Il mondo, un viaggio alla volta.</h2>
+          </div>
+          <p>
+            Filtra per continente oppure cerca un paese. Seleziona una sagoma
+            per vedere bandiera e numero di visite.
+          </p>
+        </div>
+
+        <div class="filters" aria-label="Filtri delle destinazioni">
+          <div
+            class="continent-filters"
+            id="continent-filters"
+            role="group"
+            aria-label="Filtra per continente"
+          ></div>
+
+          <label class="search">
+            <span class="sr-only">Cerca un paese</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m21 21-4.35-4.35m2.35-5.15a7.5 7.5 0 1 1-15 0 7.5 7.5 0 0 1 15 0Z" />
+            </svg>
+            <input
+              id="search-input"
+              type="search"
+              placeholder="Cerca un paese..."
+              autocomplete="off"
+            />
+          </label>
+        </div>
+
+        <div class="dashboard">
+          <div class="map-card">
+            <div class="map-card__topbar">
+              <div class="map-status">
+                <span class="map-status__pulse" aria-hidden="true"></span>
+                <span id="map-result-count">Caricamento destinazioni...</span>
+              </div>
+              <button class="map-reset" id="map-reset" type="button">
+                Vista globale
+                <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+
+            <div
+              id="map"
+              role="application"
+              aria-label="Mappa interattiva dei paesi visitati"
+            >
+              <div class="map-loading">
+                <span></span>
+                Sto colorando il tuo mondo...
+              </div>
+            </div>
+          </div>
+
+          <aside class="insights" aria-label="Approfondimenti di viaggio">
+            <article class="insight-card coverage-card">
+              <div class="insight-card__heading">
+                <div>
+                  <span class="insight-card__eyebrow">Copertura globale</span>
+                  <h3>Quanto mondo ho visto?</h3>
+                </div>
+                <span class="insight-card__icon" aria-hidden="true">↗</span>
+              </div>
+
+              <div class="coverage">
+                <div
+                  class="coverage__ring"
+                  id="coverage-ring"
+                  role="img"
+                  aria-label="Percentuale del mondo visitata"
+                >
+                  <div>
+                    <strong id="coverage-value">—</strong>
+                    <small>del mondo</small>
+                  </div>
+                </div>
+                <p>
+                  Ogni paese aggiunge una nuova sfumatura alla mappa personale.
+                </p>
+              </div>
+            </article>
+
+            <article class="insight-card">
+              <div class="insight-card__heading">
+                <div>
+                  <span class="insight-card__eyebrow">Distribuzione</span>
+                  <h3>Continenti esplorati</h3>
+                </div>
+              </div>
+              <div class="continent-chart" id="continent-chart"></div>
+            </article>
+
+            <article class="insight-card ranking-card">
+              <div class="insight-card__heading">
+                <div>
+                  <span class="insight-card__eyebrow">Classifica</span>
+                  <h3>I paesi più visitati</h3>
+                </div>
+              </div>
+              <ol class="ranking-list" id="ranking-list"></ol>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <section class="destinations shell" id="destinazioni">
+        <div class="section-heading section-heading--destinations">
+          <div>
+            <p class="section-kicker">Passaporto aperto</p>
+            <h2>I paesi che porto con me.</h2>
+          </div>
+          <p id="country-result-count" aria-live="polite"></p>
+        </div>
+
+        <div class="country-grid" id="country-grid"></div>
+
+        <div class="empty-state" id="empty-state" hidden>
+          <span aria-hidden="true">⌁</span>
+          <h3>Nessun paese trovato</h3>
+          <p>Prova a cambiare continente o a usare un'altra ricerca.</p>
+          <button class="button button--primary" id="clear-filters" type="button">
+            Azzera i filtri
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="shell footer__content">
+        <div>
+          <a class="brand brand--footer" href="./index.html">
+            <span class="brand__mark" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Zm0 0c2.2-2.4 3.3-5.4 3.3-9S14.2 5.4 12 3m0 18c-2.2-2.4-3.3-5.4-3.3-9S9.8 5.4 12 3M3.5 9h17m-17 6h17"
+                />
+              </svg>
+            </span>
+            <span>Conquer the World</span>
+          </a>
+          <p>Il viaggio continua. La mappa anche.</p>
+        </div>
+        <p class="footer__note">
+          Dati aggiornabili in
+          <code>data/visited-countries.json</code>
+        </p>
+      </div>
+    </footer>
+
+    <div class="error-banner" id="error-banner" role="alert" hidden></div>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+    <script src="./js/map.js" defer></script>
+  </body>
+</html>

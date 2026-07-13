@@ -1,0 +1,382 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Portfolio personale di Pietro Fecchio, Data Scientist: progetti, competenze e luoghi visitati."
+    />
+    <meta name="theme-color" content="#f4f1e9" />
+    <meta property="og:title" content="Pietro Fecchio | Data Scientist" />
+    <meta
+      property="og:description"
+      content="Dati, modelli e storie che aiutano a prendere decisioni migliori."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./js/main.js" defer></script>
+    <title>Pietro Fecchio | Data Scientist</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenuto">Vai al contenuto</a>
+
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="./index.html" aria-label="Pietro Fecchio, home">
+          <span class="brand-mark" aria-hidden="true">PF</span>
+          <span class="brand-name">Pietro Fecchio</span>
+        </a>
+
+        <nav class="main-nav" aria-label="Navigazione principale">
+          <a href="#chi-sono">Chi sono</a>
+          <a href="#progetti">Progetti</a>
+          <a class="nav-highlight" href="./map.html">Mappa dei viaggi</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenuto">
+      <section class="hero">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="status-dot" aria-hidden="true"></span>
+              Data Scientist · Portfolio
+            </p>
+            <h1>
+              Trasformo dati complessi in
+              <span class="accent-text">decisioni chiare.</span>
+            </h1>
+            <p class="hero-description">
+              Sono Pietro, Data Scientist. Questo spazio raccoglie analisi,
+              esperimenti e progetti in cui numeri e curiosità diventano
+              soluzioni concrete.
+            </p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#progetti">
+                Scopri i progetti
+                <span aria-hidden="true">↘</span>
+              </a>
+              <a class="button button-secondary" href="./map.html">
+                Esplora la mappa
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+            <p class="hero-note">
+              <span aria-hidden="true">✦</span>
+              Spazio per una breve nota, una specializzazione o la tua
+              disponibilità.
+            </p>
+          </div>
+
+          <div class="hero-visual" aria-label="Esempio di dashboard analitica">
+            <div class="dashboard-card">
+              <div class="dashboard-header">
+                <div>
+                  <p class="dashboard-kicker">Model performance</p>
+                  <h2>Previsioni · Q4</h2>
+                </div>
+                <span class="live-badge">Demo</span>
+              </div>
+
+              <div class="chart-wrap">
+                <div class="chart-axis" aria-hidden="true">
+                  <span>100</span>
+                  <span>75</span>
+                  <span>50</span>
+                  <span>25</span>
+                </div>
+                <svg
+                  class="line-chart"
+                  viewBox="0 0 520 230"
+                  role="img"
+                  aria-labelledby="chart-title chart-description"
+                >
+                  <title id="chart-title">Grafico dimostrativo delle previsioni</title>
+                  <desc id="chart-description">
+                    Una linea mostra un andamento crescente nel tempo.
+                  </desc>
+                  <defs>
+                    <linearGradient id="chart-area" x1="0" x2="0" y1="0" y2="1">
+                      <stop offset="0%" stop-color="#d66b4b" stop-opacity=".28" />
+                      <stop offset="100%" stop-color="#d66b4b" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <g class="chart-grid" aria-hidden="true">
+                    <line x1="0" y1="30" x2="520" y2="30" />
+                    <line x1="0" y1="85" x2="520" y2="85" />
+                    <line x1="0" y1="140" x2="520" y2="140" />
+                    <line x1="0" y1="195" x2="520" y2="195" />
+                  </g>
+                  <path
+                    class="chart-area"
+                    d="M0 178 C55 166 79 180 126 145 S206 135 252 106 S333 119 382 72 S466 71 520 31 L520 230 L0 230 Z"
+                  />
+                  <path
+                    class="chart-line"
+                    d="M0 178 C55 166 79 180 126 145 S206 135 252 106 S333 119 382 72 S466 71 520 31"
+                  />
+                  <g class="chart-points" aria-hidden="true">
+                    <circle cx="126" cy="145" r="5" />
+                    <circle cx="252" cy="106" r="5" />
+                    <circle cx="382" cy="72" r="5" />
+                    <circle cx="520" cy="31" r="6" />
+                  </g>
+                </svg>
+                <div class="chart-labels" aria-hidden="true">
+                  <span>Set</span>
+                  <span>Ott</span>
+                  <span>Nov</span>
+                  <span>Dic</span>
+                </div>
+              </div>
+
+              <div class="dashboard-metrics">
+                <div>
+                  <span>Accuracy</span>
+                  <strong>00.0%</strong>
+                </div>
+                <div>
+                  <span>MAE</span>
+                  <strong>0.00</strong>
+                </div>
+                <div>
+                  <span>Dataset</span>
+                  <strong>00k</strong>
+                </div>
+              </div>
+            </div>
+
+            <div class="floating-card floating-card-top">
+              <span class="floating-icon" aria-hidden="true">⌁</span>
+              <div>
+                <small>Stack</small>
+                <strong>Python · SQL</strong>
+              </div>
+            </div>
+
+            <div class="floating-card floating-card-bottom">
+              <span class="floating-icon coral" aria-hidden="true">↗</span>
+              <div>
+                <small>Ultimo insight</small>
+                <strong>+00.0%</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="numbers" aria-label="Risultati in evidenza">
+        <div class="container numbers-grid">
+          <div class="number-item">
+            <strong>00+</strong>
+            <span>Progetti completati</span>
+          </div>
+          <div class="number-item">
+            <strong>00</strong>
+            <span>Modelli in produzione</span>
+          </div>
+          <div class="number-item">
+            <strong>00</strong>
+            <span>Paesi esplorati</span>
+          </div>
+          <p class="placeholder-hint">
+            I numeri sono placeholder: sostituiscili con i tuoi risultati.
+          </p>
+        </div>
+      </section>
+
+      <section class="section" id="chi-sono">
+        <div class="container about-grid">
+          <div>
+            <p class="section-label">01 · Chi sono</p>
+            <h2 class="section-title">
+              Curiosità analitica,<br />
+              impatto misurabile.
+            </h2>
+          </div>
+
+          <div class="about-content">
+            <p class="about-lead">
+              Mi piace trovare la domanda giusta prima ancora di cercare la
+              risposta nei dati.
+            </p>
+            <p>
+              Questo è uno spazio segnaposto per raccontare il tuo percorso,
+              gli ambiti in cui lavori e il tipo di problemi che ami risolvere.
+              Puoi aggiungere qui formazione, esperienza e obiettivi
+              professionali.
+            </p>
+
+            <div class="toolkit" aria-label="Competenze">
+              <span>Python</span>
+              <span>SQL</span>
+              <span>Machine Learning</span>
+              <span>Data Visualization</span>
+              <span>Statistics</span>
+              <span>Cloud</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section projects-section" id="progetti">
+        <div class="container">
+          <div class="section-heading">
+            <div>
+              <p class="section-label">02 · Progetti selezionati</p>
+              <h2 class="section-title">Dai dati al risultato.</h2>
+            </div>
+            <p>
+              Tre spazi pronti per raccontare contesto, metodo e impatto dei
+              tuoi lavori migliori.
+            </p>
+          </div>
+
+          <div class="projects-grid">
+            <article class="project-card">
+              <div class="project-topline">
+                <span class="project-number">01</span>
+                <span class="placeholder-badge">Placeholder</span>
+              </div>
+              <div class="project-visual project-visual-forecast" aria-hidden="true">
+                <span class="visual-bar bar-one"></span>
+                <span class="visual-bar bar-two"></span>
+                <span class="visual-bar bar-three"></span>
+                <span class="visual-bar bar-four"></span>
+                <span class="visual-trend"></span>
+              </div>
+              <div class="project-body">
+                <div class="project-tags">
+                  <span>Forecasting</span>
+                  <span>Python</span>
+                </div>
+                <h3>Titolo del progetto</h3>
+                <p>
+                  Descrivi il problema, l'approccio adottato e il risultato
+                  ottenuto in poche righe.
+                </p>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-topline">
+                <span class="project-number">02</span>
+                <span class="placeholder-badge">Placeholder</span>
+              </div>
+              <div class="project-visual project-visual-clusters" aria-hidden="true">
+                <span class="cluster cluster-one"></span>
+                <span class="cluster cluster-two"></span>
+                <span class="cluster cluster-three"></span>
+                <span class="cluster cluster-four"></span>
+                <span class="cluster cluster-five"></span>
+                <span class="cluster cluster-six"></span>
+                <span class="cluster cluster-seven"></span>
+              </div>
+              <div class="project-body">
+                <div class="project-tags">
+                  <span>Clustering</span>
+                  <span>Insights</span>
+                </div>
+                <h3>Titolo del progetto</h3>
+                <p>
+                  Usa questo spazio per spiegare come i dati hanno guidato una
+                  decisione o migliorato un processo.
+                </p>
+              </div>
+            </article>
+
+            <article class="project-card">
+              <div class="project-topline">
+                <span class="project-number">03</span>
+                <span class="placeholder-badge">Placeholder</span>
+              </div>
+              <div class="project-visual project-visual-network" aria-hidden="true">
+                <svg viewBox="0 0 320 160">
+                  <g class="network-lines">
+                    <line x1="45" y1="50" x2="133" y2="79" />
+                    <line x1="133" y1="79" x2="222" y2="39" />
+                    <line x1="133" y1="79" x2="260" y2="115" />
+                    <line x1="72" y1="127" x2="133" y2="79" />
+                    <line x1="72" y1="127" x2="260" y2="115" />
+                  </g>
+                  <g class="network-points">
+                    <circle cx="45" cy="50" r="12" />
+                    <circle cx="133" cy="79" r="17" />
+                    <circle cx="222" cy="39" r="10" />
+                    <circle cx="260" cy="115" r="14" />
+                    <circle cx="72" cy="127" r="9" />
+                  </g>
+                </svg>
+              </div>
+              <div class="project-body">
+                <div class="project-tags">
+                  <span>NLP</span>
+                  <span>Visualization</span>
+                </div>
+                <h3>Titolo del progetto</h3>
+                <p>
+                  Aggiungi tecnologie, link al repository e una metrica che
+                  renda concreto il valore del progetto.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section journey-section">
+        <div class="container">
+          <div class="journey-card">
+            <div class="journey-copy">
+              <p class="section-label section-label-light">03 · Oltre i dati</p>
+              <h2>Ogni luogo è un nuovo punto di vista.</h2>
+              <p>
+                Una mappa interattiva dedicata ai luoghi visitati, alle storie
+                raccolte e ai prossimi itinerari.
+              </p>
+              <a class="button button-light" href="./map.html">
+                Apri la mappa
+                <span aria-hidden="true">→</span>
+              </a>
+            </div>
+
+            <div class="journey-globe" aria-hidden="true">
+              <span class="orbit orbit-one"></span>
+              <span class="orbit orbit-two"></span>
+              <span class="globe-dot dot-one"></span>
+              <span class="globe-dot dot-two"></span>
+              <span class="globe-dot dot-three"></span>
+              <span class="globe-dot dot-four"></span>
+              <span class="globe-ring"></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div>
+          <a class="brand" href="./index.html" aria-label="Pietro Fecchio, home">
+            <span class="brand-mark" aria-hidden="true">PF</span>
+            <span class="brand-name">Pietro Fecchio</span>
+          </a>
+          <p>Data, models &amp; meaningful questions.</p>
+        </div>
+
+        <div class="footer-links">
+          <a href="https://github.com/pfecchio">GitHub</a>
+          <a href="#chi-sono">Chi sono</a>
+          <a href="./map.html">Mappa</a>
+        </div>
+
+        <p class="copyright">
+          © <span data-current-year></span> Pietro Fecchio
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>

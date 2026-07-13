@@ -1,0 +1,64 @@
+{
+  "countries": [
+    {
+      "name": "Italia",
+      "code": "IT",
+      "continent": "Europa",
+      "visits": 19
+    },
+    {
+      "name": "Spagna",
+      "code": "ES",
+      "continent": "Europa",
+      "visits": 1
+    },
+    {
+      "name": "Albania",
+      "code": "AL",
+      "continent": "Europa",
+      "visits": 2
+    },
+    {
+      "name": "Grecia",
+      "code": "GR",
+      "continent": "Europa",
+      "visits": 1
+    },
+    {
+      "name": "Kosovo",
+      "code": "XK",
+      "continent": "Europa",
+      "visits": 1
+    },
+    {
+      "name": "Stati Uniti",
+      "code": "US",
+      "continent": "Nord America",
+      "visits": 1
+    },
+    {
+      "name": "Canada",
+      "code": "CA",
+      "continent": "Nord America",
+      "visits": 1
+    },
+    {
+      "name": "Ungheria",
+      "code": "HU",
+      "continent": "Europa",
+      "visits": 1
+    },
+    {
+      "name": "Siria",
+      "code": "SY",
+      "continent": "Asia",
+      "visits": 1
+    },
+    {
+      "name": "Colombia",
+      "code": "CO",
+      "continent": "Sud America",
+      "visits": 1
+    }
+  ]
+}
