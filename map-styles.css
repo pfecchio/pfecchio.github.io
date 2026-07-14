@@ -300,6 +300,16 @@ svg {
   background: var(--terracotta);
 }
 
+.button--secondary {
+  color: var(--ink);
+  background: transparent;
+}
+
+.button--secondary:hover {
+  color: var(--paper);
+  background: var(--ink);
+}
+
 .hero__art {
   position: relative;
   width: min(100%, 380px);
@@ -451,6 +461,7 @@ main {
 }
 
 .map-section,
+.italy-section,
 .destinations {
   padding-top: 126px;
 }
@@ -664,6 +675,266 @@ main {
   border-top-color: var(--terracotta);
   border-radius: 50%;
   animation: spin 900ms linear infinite;
+}
+
+.italy-dashboard {
+  display: grid;
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1.42fr) minmax(350px, 0.68fr);
+  gap: 19px;
+}
+
+.italy-map-card,
+.italy-panel {
+  border: 1px solid var(--line-dark);
+  background: var(--surface);
+}
+
+.italy-map-card {
+  overflow: hidden;
+}
+
+#italy-map {
+  position: relative;
+  z-index: 1;
+  height: 760px;
+  border-bottom: 1px solid var(--line);
+  background:
+    linear-gradient(rgba(29, 29, 26, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 29, 26, 0.04) 1px, transparent 1px),
+    var(--sage);
+  background-size: 30px 30px;
+}
+
+.italy-map-credit {
+  min-height: 42px;
+  margin: 0;
+  padding: 12px 18px;
+  color: var(--muted);
+  font-size: 0.56rem;
+  line-height: 1.55;
+}
+
+.italy-map-credit a {
+  color: var(--terracotta-dark);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+
+.italy-panel {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.italy-panel__header {
+  display: flex;
+  min-height: 96px;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 23px;
+  border-bottom: 1px solid var(--line-dark);
+}
+
+.italy-panel__header h3 {
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+}
+
+.italy-stats {
+  display: grid;
+  border-bottom: 1px solid var(--line-dark);
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.italy-stats div {
+  min-width: 0;
+  padding: 20px 14px;
+  border-right: 1px solid var(--line);
+}
+
+.italy-stats div:last-child {
+  border-right: 0;
+}
+
+.italy-stats strong,
+.italy-stats span {
+  display: block;
+}
+
+.italy-stats strong {
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: 1.65rem;
+  font-weight: 400;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.italy-stats span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 0.52rem;
+  line-height: 1.35;
+}
+
+.italy-coverage-track {
+  overflow: hidden;
+  height: 7px;
+  margin: 20px 22px 0;
+  background: var(--paper-deep);
+}
+
+.italy-coverage-track span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--terracotta);
+  transition: width 650ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.region-legend {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 22px 20px;
+  border-bottom: 1px solid var(--line-dark);
+  color: var(--muted);
+  font-size: 0.56rem;
+  font-weight: 700;
+}
+
+.region-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.region-legend__swatch {
+  width: 11px;
+  height: 11px;
+  border: 1px solid var(--line-dark);
+  background: #ddd9cf;
+}
+
+.region-legend__swatch.is-visited {
+  border-color: var(--terracotta);
+  background: var(--terracotta);
+}
+
+.region-list-heading {
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 22px;
+}
+
+.region-list-heading span {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.region-list-heading small {
+  color: var(--muted);
+  font-size: 0.52rem;
+}
+
+.region-list {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  border-bottom: 1px solid var(--line);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.region-item {
+  display: grid;
+  min-width: 0;
+  min-height: 58px;
+  align-items: center;
+  padding: 9px 11px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  text-align: left;
+  background: transparent;
+  cursor: pointer;
+  grid-template-columns: 9px minmax(0, 1fr) auto;
+  gap: 8px;
+  transition: background-color 160ms ease;
+}
+
+.region-item:nth-child(2n) {
+  border-right: 0;
+}
+
+.region-item:hover,
+.region-item.is-active {
+  background: var(--paper-deep);
+}
+
+.region-item__dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid var(--line-dark);
+  background: #ddd9cf;
+}
+
+.region-item.is-visited .region-item__dot {
+  border-color: var(--terracotta);
+  background: var(--terracotta);
+}
+
+.region-item__copy {
+  min-width: 0;
+}
+
+.region-item__copy strong,
+.region-item__copy small {
+  display: block;
+}
+
+.region-item__copy strong {
+  overflow: hidden;
+  font-family: var(--serif);
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+}
+
+.region-item__copy small {
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 0.48rem;
+}
+
+.region-item.is-visited .region-item__copy small {
+  color: var(--terracotta-dark);
+}
+
+.region-item__arrow {
+  color: var(--muted);
+  font-size: 0.58rem;
+  transition: transform 160ms ease;
+}
+
+.region-item:hover .region-item__arrow,
+.region-item.is-active .region-item__arrow {
+  color: var(--terracotta-dark);
+  transform: translate(1px, -1px);
 }
 
 @keyframes spin {
@@ -1207,6 +1478,16 @@ main {
   font-size: 1.35rem;
 }
 
+.region-popup__mark {
+  border-color: var(--terracotta);
+  color: var(--paper);
+  background: var(--terracotta);
+  font-family: var(--sans);
+  font-size: 0.64rem;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+
 .map-popup__visits {
   padding: 5px 8px;
   border: 1px solid var(--terracotta);
@@ -1246,6 +1527,26 @@ main {
 
   .dashboard {
     grid-template-columns: 1fr;
+  }
+
+  .italy-dashboard {
+    grid-template-columns: 1fr;
+  }
+
+  #italy-map {
+    height: 680px;
+  }
+
+  .region-list {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .region-item:nth-child(2n) {
+    border-right: 1px solid var(--line);
+  }
+
+  .region-item:nth-child(4n) {
+    border-right: 0;
   }
 
   .insights {
@@ -1328,6 +1629,7 @@ main {
   }
 
   .map-section,
+  .italy-section,
   .destinations {
     padding-top: 92px;
   }
@@ -1368,6 +1670,22 @@ main {
 
   #map {
     height: 470px;
+  }
+
+  #italy-map {
+    height: 620px;
+  }
+
+  .region-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .region-item:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .region-item:nth-child(2n + 1) {
+    border-right: 1px solid var(--line);
   }
 
   .insights {
@@ -1466,6 +1784,31 @@ main {
 
   #map {
     height: 420px;
+  }
+
+  #italy-map {
+    height: 540px;
+  }
+
+  .italy-panel__header {
+    min-height: 90px;
+    padding: 20px;
+  }
+
+  .italy-stats div {
+    padding-inline: 10px;
+  }
+
+  .italy-stats strong {
+    font-size: 1.45rem;
+  }
+
+  .region-list-heading {
+    padding-inline: 16px;
+  }
+
+  .region-item {
+    padding-inline: 8px;
   }
 
   .coverage {

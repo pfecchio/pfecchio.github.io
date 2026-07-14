@@ -61,8 +61,12 @@
 
           <div class="hero__actions">
             <a class="button button--primary" href="#mappa">
-              Esplora la mappa
+              Esplora il mondo
               <span aria-hidden="true">→</span>
+            </a>
+            <a class="button button--secondary" href="#italia">
+              Esplora l'Italia
+              <span aria-hidden="true">↓</span>
             </a>
           </div>
         </div>
@@ -208,6 +212,116 @@
         </div>
       </section>
 
+      <section class="italy-section shell" id="italia">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">Italia, nel dettaglio</p>
+            <h2>Una regione alla volta.</h2>
+          </div>
+          <p>
+            Seleziona una regione per esplorarla. Quelle già visitate si
+            colorano e contribuiscono alle statistiche del mio viaggio in
+            Italia.
+          </p>
+        </div>
+
+        <div class="italy-dashboard">
+          <div class="italy-map-card">
+            <div class="map-card__topbar">
+              <div class="map-status">
+                <span class="map-status__pulse" aria-hidden="true"></span>
+                <span id="italy-map-result-count">Caricamento regioni...</span>
+              </div>
+              <button class="map-reset" id="italy-map-reset" type="button">
+                Vista Italia
+                <span aria-hidden="true">↗</span>
+              </button>
+            </div>
+
+            <div
+              id="italy-map"
+              role="application"
+              aria-label="Mappa interattiva delle regioni italiane visitate"
+            >
+              <div class="map-loading">
+                <span></span>
+                Sto disegnando l'Italia...
+              </div>
+            </div>
+
+            <p class="italy-map-credit">
+              Confini regionali:
+              <a href="https://www.istat.it/" rel="noreferrer">ISTAT</a>,
+              elaborazione
+              <a
+                href="https://github.com/openpolis/geojson-italy"
+                rel="noreferrer"
+              >
+                Openpolis
+              </a>
+              ·
+              <a
+                href="https://creativecommons.org/licenses/by/4.0/"
+                rel="noreferrer"
+              >
+                CC BY 4.0
+              </a>
+            </p>
+          </div>
+
+          <aside class="italy-panel" aria-label="Statistiche delle regioni italiane">
+            <div class="italy-panel__header">
+              <div>
+                <span class="insight-card__eyebrow">Viaggi in Italia</span>
+                <h3>La mia copertura regionale</h3>
+              </div>
+              <span class="insight-card__icon" aria-hidden="true">IT</span>
+            </div>
+
+            <div class="italy-stats">
+              <div>
+                <strong id="visited-regions-count">—</strong>
+                <span>Regioni visitate</span>
+              </div>
+              <div>
+                <strong id="italy-visits-count">—</strong>
+                <span>Visite registrate</span>
+              </div>
+              <div>
+                <strong id="italy-coverage-value">—</strong>
+                <span>Copertura</span>
+              </div>
+            </div>
+
+            <div
+              class="italy-coverage-track"
+              role="img"
+              id="italy-coverage-track"
+              aria-label="Copertura delle regioni italiane"
+            >
+              <span id="italy-coverage-fill"></span>
+            </div>
+
+            <div class="region-legend" aria-label="Legenda della mappa italiana">
+              <span>
+                <i class="region-legend__swatch is-visited" aria-hidden="true"></i>
+                Visitata
+              </span>
+              <span>
+                <i class="region-legend__swatch" aria-hidden="true"></i>
+                Da visitare
+              </span>
+            </div>
+
+            <div class="region-list-heading">
+              <span>Le 20 regioni</span>
+              <small>Seleziona per ingrandire</small>
+            </div>
+            <div class="region-list" id="region-list"></div>
+          </aside>
+        </div>
+      </section>
+
       <section class="destinations shell" id="destinazioni">
         <div class="section-heading section-heading--destinations">
           <div>
@@ -246,8 +360,10 @@
           <p>Il viaggio continua. La mappa anche.</p>
         </div>
         <p class="footer__note">
-          Dati aggiornabili in
+          Viaggi aggiornabili in
           <code>data/visited-countries.json</code>
+          e
+          <code>data/visited-italian-regions.json</code>
         </p>
       </div>
     </footer>

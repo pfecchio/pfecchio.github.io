@@ -1,9 +1,12 @@
 "use strict";
 
 const DATA_URL = "./data/visited-countries.json";
+const REGIONS_DATA_URL = "./data/visited-italian-regions.json";
+const ITALY_GEOJSON_URL = "./data/italy-regions.geojson";
 const GEOJSON_URL =
   "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_admin_0_countries.geojson";
 const WORLD_COUNTRY_COUNT = 195;
+const ITALIAN_REGION_COUNT = 20;
 const DEFAULT_VIEW = {
   center: [22, 10],
   zoom: 2,
@@ -28,6 +31,12 @@ const state = {
   activeContinent: "Tutti",
   query: "",
   currentResults: [],
+  regionData: null,
+  regionByCode: new Map(),
+  italyMap: null,
+  italyGeoJsonLayer: null,
+  italyBounds: null,
+  regionLayers: new Map(),
 };
 
 const elements = {
@@ -43,6 +52,14 @@ const elements = {
   emptyState: document.querySelector("#empty-state"),
   clearFilters: document.querySelector("#clear-filters"),
   mapReset: document.querySelector("#map-reset"),
+  italyMapResultCount: document.querySelector("#italy-map-result-count"),
+  italyMapReset: document.querySelector("#italy-map-reset"),
+  visitedRegionsCount: document.querySelector("#visited-regions-count"),
+  italyVisitsCount: document.querySelector("#italy-visits-count"),
+  italyCoverageValue: document.querySelector("#italy-coverage-value"),
+  italyCoverageTrack: document.querySelector("#italy-coverage-track"),
+  italyCoverageFill: document.querySelector("#italy-coverage-fill"),
+  regionList: document.querySelector("#region-list"),
   errorBanner: document.querySelector("#error-banner"),
 };
 
@@ -57,47 +74,67 @@ async function initialize() {
     );
   }
 
-  const [travelResponse, geoJsonResponse] = await Promise.all([
+  const [
+    travelResponse,
+    geoJsonResponse,
+    regionResponse,
+    italyGeoJsonResponse,
+  ] = await Promise.all([
     fetch(DATA_URL, { cache: "no-store" }),
     fetch(GEOJSON_URL),
+    fetch(REGIONS_DATA_URL, { cache: "no-store" }),
+    fetch(ITALY_GEOJSON_URL),
   ]);
 
-  if (!travelResponse.ok) {
-    throw new Error(
-      `Impossibile caricare ${DATA_URL}: il server ha risposto con stato ${travelResponse.status}.`,
-    );
-  }
+  requireSuccessfulResponse(travelResponse, DATA_URL);
+  requireSuccessfulResponse(geoJsonResponse, "le sagome dei paesi");
+  requireSuccessfulResponse(regionResponse, REGIONS_DATA_URL);
+  requireSuccessfulResponse(italyGeoJsonResponse, "le sagome delle regioni");
 
-  if (!geoJsonResponse.ok) {
-    throw new Error(
-      `Impossibile caricare le sagome dei paesi: il server ha risposto con stato ${geoJsonResponse.status}.`,
-    );
-  }
-
-  const [data, geoJson] = await Promise.all([
+  const [data, geoJson, regionData, italyGeoJson] = await Promise.all([
     travelResponse.json(),
     geoJsonResponse.json(),
+    regionResponse.json(),
+    italyGeoJsonResponse.json(),
   ]);
 
   validateTravelData(data);
-  validateGeoJson(geoJson);
+  validateRegionData(regionData);
+  validateGeoJson(geoJson, "La sorgente geografica mondiale");
+  validateGeoJson(italyGeoJson, "La sorgente geografica italiana");
 
   state.data = data;
   state.countryByCode = new Map(
     data.countries.map((country) => [country.code.toUpperCase(), country]),
   );
   state.visibleCodes = new Set(state.countryByCode.keys());
+  state.regionData = regionData;
+  state.regionByCode = new Map(
+    regionData.regions.map((region) => [region.code, region]),
+  );
 
   initializeMap(geoJson);
+  initializeItalyMap(italyGeoJson);
   bindEvents();
   renderStaticContent();
+  renderItalyContent();
   renderFilters();
   applyFilters({ fitMap: true });
 
   requestAnimationFrame(() => {
     document.body.classList.add("is-ready");
     state.map.invalidateSize();
+    state.italyMap.invalidateSize();
+    fitItalyMap({ animate: false });
   });
+}
+
+function requireSuccessfulResponse(response, resourceName) {
+  if (!response.ok) {
+    throw new Error(
+      `Impossibile caricare ${resourceName}: il server ha risposto con stato ${response.status}.`,
+    );
+  }
 }
 
 function validateTravelData(data) {
@@ -161,13 +198,75 @@ function validateTravelData(data) {
   });
 }
 
-function validateGeoJson(geoJson) {
+function validateRegionData(data) {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    throw new Error("Il file delle regioni deve contenere un oggetto.");
+  }
+
+  const rootKeys = Object.keys(data);
+  if (rootKeys.length !== 1 || rootKeys[0] !== "regions") {
+    throw new Error(
+      "Il file delle regioni deve contenere soltanto la proprietà “regions”.",
+    );
+  }
+
+  if (
+    !Array.isArray(data.regions) ||
+    data.regions.length !== ITALIAN_REGION_COUNT
+  ) {
+    throw new Error(
+      `Il file delle regioni deve contenere tutte le ${ITALIAN_REGION_COUNT} regioni italiane.`,
+    );
+  }
+
+  const expectedFields = ["name", "code", "visits"];
+  const regionCodes = new Set();
+
+  data.regions.forEach((region, regionIndex) => {
+    const label = `regions[${regionIndex}]`;
+    const fields = Object.keys(region);
+    const missingFields = expectedFields.filter((field) => !(field in region));
+    const extraFields = fields.filter((field) => !expectedFields.includes(field));
+
+    if (missingFields.length > 0 || extraFields.length > 0) {
+      const details = [
+        missingFields.length > 0
+          ? `mancano: ${missingFields.join(", ")}`
+          : null,
+        extraFields.length > 0
+          ? `non supportati: ${extraFields.join(", ")}`
+          : null,
+      ]
+        .filter(Boolean)
+        .join("; ");
+      throw new Error(`${label} non rispetta il formato previsto (${details}).`);
+    }
+
+    requireString(region.name, `${label}.name`);
+    requireString(region.code, `${label}.code`);
+
+    if (!/^\d{2}$/.test(region.code)) {
+      throw new Error(`${label}.code deve essere un codice ISTAT di due cifre.`);
+    }
+
+    if (regionCodes.has(region.code)) {
+      throw new Error(`Il codice regionale ${region.code} è duplicato nel JSON.`);
+    }
+    regionCodes.add(region.code);
+
+    if (!Number.isInteger(region.visits) || region.visits < 0) {
+      throw new Error(`${label}.visits deve essere un intero maggiore o uguale a zero.`);
+    }
+  });
+}
+
+function validateGeoJson(geoJson, sourceName) {
   if (
     !geoJson ||
     geoJson.type !== "FeatureCollection" ||
     !Array.isArray(geoJson.features)
   ) {
-    throw new Error("La sorgente geografica non contiene un GeoJSON valido.");
+    throw new Error(`${sourceName} non contiene un GeoJSON valido.`);
   }
 }
 
@@ -247,6 +346,69 @@ function initializeMap(geoJson) {
   document.querySelector("#map .map-loading")?.remove();
 }
 
+function initializeItalyMap(geoJson) {
+  state.italyMap = window.L.map("italy-map", {
+    attributionControl: false,
+    zoomControl: false,
+    scrollWheelZoom: false,
+    minZoom: 4,
+    maxZoom: 9,
+    zoomSnap: 0.25,
+  });
+
+  window.L.control.zoom({ position: "bottomright" }).addTo(state.italyMap);
+
+  state.italyGeoJsonLayer = window.L.geoJSON(geoJson, {
+    style: (feature) => getRegionStyle(getFeatureRegionCode(feature)),
+    onEachFeature: (feature, layer) => {
+      const code = getFeatureRegionCode(feature);
+      const region = code ? state.regionByCode.get(code) : null;
+
+      if (!region) {
+        return;
+      }
+
+      state.regionLayers.set(code, layer);
+      layer.bindPopup(createRegionPopupContent(region), {
+        closeButton: false,
+        maxWidth: 240,
+      });
+      layer.bindTooltip(escapeHtml(region.name), {
+        sticky: true,
+        direction: "top",
+        className: "country-tooltip region-tooltip",
+      });
+
+      layer.on({
+        click: () => setActiveRegion(code),
+        mouseover: () => {
+          layer.setStyle({
+            weight: 2.2,
+            fillOpacity: region.visits > 0 ? 0.94 : 0.72,
+          });
+          layer.bringToFront();
+        },
+        mouseout: () => {
+          layer.setStyle(getRegionStyle(code));
+        },
+      });
+    },
+  }).addTo(state.italyMap);
+
+  const missingCodes = [...state.regionByCode.keys()].filter(
+    (code) => !state.regionLayers.has(code),
+  );
+  if (missingCodes.length > 0) {
+    throw new Error(
+      `Nessuna sagoma regionale trovata per i codici: ${missingCodes.join(", ")}.`,
+    );
+  }
+
+  state.italyBounds = state.italyGeoJsonLayer.getBounds();
+  fitItalyMap({ animate: false });
+  document.querySelector("#italy-map .map-loading")?.remove();
+}
+
 function getFeatureCountryCode(feature) {
   const properties = feature?.properties || {};
   const candidates = [
@@ -261,6 +423,11 @@ function getFeatureCountryCode(feature) {
       (code) => typeof code === "string" && /^[A-Z]{2}$/.test(code),
     ) || null
   );
+}
+
+function getFeatureRegionCode(feature) {
+  const code = feature?.properties?.reg_istat_code;
+  return typeof code === "string" && /^\d{2}$/.test(code) ? code : null;
 }
 
 function getCountryStyle(code) {
@@ -289,6 +456,20 @@ function getCountryStyle(code) {
     weight: 1.15,
     fillColor: getContinentColor(country.continent),
     fillOpacity: 0.76,
+  };
+}
+
+function getRegionStyle(code) {
+  const region = code ? state.regionByCode.get(code) : null;
+  const isVisited = region?.visits > 0;
+
+  return {
+    color: isVisited ? "#f4f1e9" : "#9e998f",
+    weight: isVisited ? 1.5 : 1,
+    fillColor: isVisited ? "#d66b4b" : "#ddd9cf",
+    fillOpacity: isVisited
+      ? Math.min(0.68 + region.visits * 0.035, 0.9)
+      : 0.52,
   };
 }
 
@@ -322,6 +503,21 @@ function bindEvents() {
   elements.mapReset.addEventListener("click", () => {
     state.map.setView(DEFAULT_VIEW.center, DEFAULT_VIEW.zoom);
   });
+
+  elements.regionList.addEventListener("click", (event) => {
+    const button = event.target.closest("[data-focus-region]");
+    if (!button) {
+      return;
+    }
+
+    focusRegionOnMap(button.dataset.focusRegion);
+  });
+
+  elements.italyMapReset.addEventListener("click", () => {
+    setActiveRegion(null);
+    state.italyMap.closePopup();
+    fitItalyMap();
+  });
 }
 
 function renderStaticContent() {
@@ -349,6 +545,56 @@ function renderStaticContent() {
 
   renderContinentChart(stats.continentCounts, stats.countryCount);
   renderRanking(stats.ranking);
+}
+
+function renderItalyContent() {
+  const visitedRegions = state.regionData.regions.filter(
+    (region) => region.visits > 0,
+  );
+  const visitCount = visitedRegions.reduce(
+    (total, region) => total + region.visits,
+    0,
+  );
+  const coverage = (visitedRegions.length / ITALIAN_REGION_COUNT) * 100;
+
+  elements.visitedRegionsCount.textContent = `${formatNumber(visitedRegions.length)}/${ITALIAN_REGION_COUNT}`;
+  elements.italyVisitsCount.textContent = formatNumber(visitCount);
+  elements.italyCoverageValue.textContent = `${formatDecimal(coverage)}%`;
+  elements.italyCoverageFill.style.width = `${coverage.toFixed(2)}%`;
+  elements.italyCoverageTrack.setAttribute(
+    "aria-label",
+    `${formatDecimal(coverage)}% delle regioni italiane visitato`,
+  );
+  elements.italyMapResultCount.textContent =
+    visitedRegions.length === 0
+      ? "Nessuna regione ancora registrata"
+      : visitedRegions.length === 1
+        ? "1 regione visitata"
+        : `${formatNumber(visitedRegions.length)} regioni visitate`;
+
+  elements.regionList.innerHTML = [...state.regionData.regions]
+    .sort((first, second) => first.code.localeCompare(second.code))
+    .map((region) => {
+      const isVisited = region.visits > 0;
+      const status = isVisited ? formatVisitCount(region.visits) : "Da visitare";
+
+      return `
+        <button
+          class="region-item${isVisited ? " is-visited" : ""}"
+          type="button"
+          data-focus-region="${escapeHtml(region.code)}"
+          aria-label="Mostra ${escapeHtml(region.name)} sulla mappa, ${escapeHtml(status)}"
+        >
+          <span class="region-item__dot" aria-hidden="true"></span>
+          <span class="region-item__copy">
+            <strong>${escapeHtml(region.name)}</strong>
+            <small>${escapeHtml(status)}</small>
+          </span>
+          <span class="region-item__arrow" aria-hidden="true">↗</span>
+        </button>
+      `;
+    })
+    .join("");
 }
 
 function calculateStats() {
@@ -506,6 +752,24 @@ function createPopupContent(country) {
   `;
 }
 
+function createRegionPopupContent(region) {
+  const status =
+    region.visits > 0 ? formatVisitCount(region.visits) : "Da visitare";
+
+  return `
+    <article class="map-popup region-popup">
+      <div class="map-popup__topline">
+        <span class="map-popup__flag region-popup__mark" aria-hidden="true">
+          IT
+        </span>
+        <span class="map-popup__visits">${escapeHtml(status)}</span>
+      </div>
+      <h3>${escapeHtml(region.name)}</h3>
+      <p>Regione italiana · ISTAT ${escapeHtml(region.code)}</p>
+    </article>
+  `;
+}
+
 function renderCountryCards(countries) {
   const maxVisits = Math.max(
     ...state.data.countries.map((country) => country.visits),
@@ -632,6 +896,48 @@ function focusCountryOnMap(countryCode) {
   }, 450);
 }
 
+function focusRegionOnMap(regionCode) {
+  const layer = state.regionLayers.get(regionCode);
+  if (!layer) {
+    return;
+  }
+
+  setActiveRegion(regionCode);
+  state.italyMap.fitBounds(layer.getBounds(), {
+    animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    duration: 0.45,
+    padding: [54, 54],
+    maxZoom: 7,
+  });
+
+  window.setTimeout(() => {
+    layer.openPopup();
+  }, 350);
+}
+
+function fitItalyMap(options = {}) {
+  if (!state.italyMap || !state.italyBounds) {
+    return;
+  }
+
+  state.italyMap.fitBounds(state.italyBounds, {
+    animate: !window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    padding: [30, 30],
+    maxZoom: 6.25,
+    ...options,
+  });
+}
+
+function setActiveRegion(regionCode) {
+  elements.regionList
+    .querySelectorAll("[data-focus-region]")
+    .forEach((button) => {
+      const isActive = button.dataset.focusRegion === regionCode;
+      button.classList.toggle("is-active", isActive);
+      button.setAttribute("aria-pressed", String(isActive));
+    });
+}
+
 function resetFilters() {
   state.activeContinent = "Tutti";
   state.query = "";
@@ -698,6 +1004,14 @@ function handleFatalError(error) {
   mapElement.innerHTML = `
     <div class="map-loading">
       Impossibile caricare la mappa. Controlla la connessione e riprova.
+    </div>
+  `;
+
+  elements.italyMapResultCount.textContent = "Dati regionali non disponibili";
+  const italyMapElement = document.querySelector("#italy-map");
+  italyMapElement.innerHTML = `
+    <div class="map-loading">
+      Impossibile caricare la mappa italiana. Controlla i dati e riprova.
     </div>
   `;
 }

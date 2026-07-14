@@ -1,0 +1,104 @@
+{
+  "regions": [
+    {
+      "name": "Piemonte",
+      "code": "01",
+      "visits": 7
+    },
+    {
+      "name": "Valle d'Aosta",
+      "code": "02",
+      "visits": 0
+    },
+    {
+      "name": "Lombardia",
+      "code": "03",
+      "visits": 1
+    },
+    {
+      "name": "Trentino-Alto Adige",
+      "code": "04",
+      "visits": 0
+    },
+    {
+      "name": "Veneto",
+      "code": "05",
+      "visits": 0
+    },
+    {
+      "name": "Friuli-Venezia Giulia",
+      "code": "06",
+      "visits": 0
+    },
+    {
+      "name": "Liguria",
+      "code": "07",
+      "visits": 1
+    },
+    {
+      "name": "Emilia-Romagna",
+      "code": "08",
+      "visits": 1
+    },
+    {
+      "name": "Toscana",
+      "code": "09",
+      "visits": 0
+    },
+    {
+      "name": "Umbria",
+      "code": "10",
+      "visits": 0
+    },
+    {
+      "name": "Marche",
+      "code": "11",
+      "visits": 0
+    },
+    {
+      "name": "Lazio",
+      "code": "12",
+      "visits": 2
+    },
+    {
+      "name": "Abruzzo",
+      "code": "13",
+      "visits": 1
+    },
+    {
+      "name": "Molise",
+      "code": "14",
+      "visits": 0
+    },
+    {
+      "name": "Campania",
+      "code": "15",
+      "visits": 1
+    },
+    {
+      "name": "Puglia",
+      "code": "16",
+      "visits": 1
+    },
+    {
+      "name": "Basilicata",
+      "code": "17",
+      "visits": 0
+    },
+    {
+      "name": "Calabria",
+      "code": "18",
+      "visits": 1
+    },
+    {
+      "name": "Sicilia",
+      "code": "19",
+      "visits": 3
+    },
+    {
+      "name": "Sardegna",
+      "code": "20",
+      "visits": 0
+    }
+  ]
+}
